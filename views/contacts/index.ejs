@@ -11,9 +11,7 @@
             <ul>
                 <% contacts.forEach(function(contact) { %>
                     <li>
-                        <%= contact.name %>
-                        <%= contact.email %>
-                        <%= contact.phone %>
+                       <a href="/contacts/<%= contact._id %>"><%= contact.name %></a>
                     </li>
                     <% }) %>
             </ul>
