@@ -30,66 +30,10 @@ _method의 query로 들어오는 값으로 HTTP method를 바꿉니다.
 _method의 값인 delete을 읽어 해당 request의 HTTP method를 delete으로 바꿉니다.
 */
 
-// DB schema // 4
-var contactSchema = mongoose.Schema({
-    name:{type:String, required:true, unique:true},
-    email:{type:String},
-    phone:{type:String}
-});
-var Contact = mongoose.model("contact", contactSchema);
-/* 주소록 DB의 스키마를 생성하고, 그것을 등록. */
-
 // Routes
-// Home // 6
-app.get("/", function(req, res){
-    res.redirect("/contacts");
-});
-// Contacts - Index // 7
-app.get("/contacts", function(req, res){
-    Contact.find({}, function(err, contacts){
-        if(err) return res.json(err);
-        res.render("contacts/index", {contacts:contacts});
-    });
-});
-// Contacts - New // 8
-app.get("/contacts/new", function(req, res){
-    res.render("contacts/new");
-});
-// Contacts - create // 9
-app.post("/contacts", function(req, res){
-    Contact.create(req.body, function(err, contacts){
-        if(err) return res.json(err);
-        res.redirect("/contacts");
-    });
-});
-// Contacts - Show
-app.get("/contacts/:id", function(req, res) {
-    Contact.findOne({_id:req.params.id}, function(err, contact){
-        if(err) return res.json(err);
-        res.render("contacts/show", {contact:contact});
-    });
-});
-// Contacts - Edit
-app.get("/contacts/:id/edit", function(req, res) {
-    Contact.findOne({_id:req.params.id}, function(err, contact){
-        if(err) return res.json(err);
-        res.render("contacts/edit", {contact:contact});
-    });
-});
-// Contacts - Update
-app.put("/contacts/:id", function(req, res) {
-    Contact.findOneAndUpdate({_id:req.params.id}, req.body, function(err, contact){
-        if(err) return res.json(err);
-        res.redirect("/contacts/" + req.params.id);
-    });
-});
-// Contacts - Destroy
-app.delete("/contacts/:id", function(req, res) {
-    Contact.remove({_id:req.params.id}, function(err, contact){
-        if(err) return res.json(err);
-        res.redirect("/contacts");
-    });
-});
+app.use("/", require("./routes/home")); // 모듈 호출
+app.use("/contacts", require("./routes/contacts")); // 모듈 호출
+
 
 
 app.listen(3000);
